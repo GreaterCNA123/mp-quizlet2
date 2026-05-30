@@ -17,56 +17,65 @@ export default function CreatePage() {
   let [group, setGroup] = useState([]);
   let [ar, setAr] = useState(["option 1", "option 2"]);
   return (
-    <form
-      className="flex flex-row w-full flex-1 justify-center gap-x-5 items-center bg-black gap-y-3"
-      onSubmit={() => handleSubmit()}
-    >
-      {/* left */}
-      <div className="flex flex-1 flex-col gap-3 mx-7">
+    <div className="flex flex-col">
+      <div className="w-full h-20 bg-white flex">
         <input
-          placeholder={`Set Your Question Here`}
-          className="h-12 btn bg-white text-black mt-3"
-          name="question"
+          placeholder="Title: "
+          className="w-1/2 flex-1 border-black border-solid border-2 text-black text-3xl"
         ></input>
         <div
-          className="h-24 btn bg-white text-black"
-          onClick={() => !placeholder_1}
-        >
-          {placeholder_1 ? "Image" : "+"}
-        </div>
-        <div className="grid grid-cols-2">
-          {ar.map((v, i) => (
-            <div
-              className={`${ans != 0 ? (ans === i ? "bg-red-500" : "") : ""}h-50 btn bg-white`}
-            >
-              <input
-                className="w-full text-black"
-                placeholder={`${ar[i]}`}
-              ></input>
-              <div onClick={() => setAns(i)}></div>
-            </div>
-          ))}
-          {ar.length < 4 ? (
-            <div
-              className="w-50 h-50 btn bg-white text-black"
-              onClick={() => setAr([...ar, "Option " + (ar.length + 1)])}
-            >
-              +
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
-      </div>
-
-      {/* right */}
-      <div>
-        <div
-          className="btn bg-gray-500 border-black border-solid border-2"
+          className="btn border-black border-solid border-2 bg-gray-600"
           onClick={() => setSetting(!setting)}
         >
           ⚙️Setting
         </div>
+      </div>
+      <form
+        className="flex flex-row w-full flex-1 justify-center gap-x-5 items-center bg-black gap-y-3"
+        onSubmit={() => handleSubmit()}
+      >
+        {/* Right */}
+        <div className="w-50 bg-white h-full"></div>
+
+        {/* Center */}
+        <div className="flex flex-1 flex-col gap-3 mx-7">
+          <input
+            placeholder={`Set Your Question Here`}
+            className="h-12 btn bg-white text-black mt-3"
+            name="question"
+          ></input>
+          <div
+            className="h-24 btn bg-white text-black"
+            onClick={() => !placeholder_1}
+          >
+            {placeholder_1 ? "Image" : "+"}
+          </div>
+          <div className="grid grid-cols-2">
+            {ar.map((v, i) => (
+              <div
+                className={`${ans != 0 ? (ans === i ? "bg-red-500" : "") : ""}h-50 btn bg-white`}
+              >
+                <input
+                  className="w-full text-black"
+                  placeholder={`${ar[i]}`}
+                ></input>
+                <div onClick={() => setAns(i)}></div>
+              </div>
+            ))}
+            {ar.length < 4 ? (
+              <div
+                className="w-50 h-50 btn bg-white text-black"
+                onClick={() => setAr([...ar, "Option " + (ar.length + 1)])}
+              >
+                +
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
+
+        {/* right */}
         {setting ? (
           <div
             className="flex flex-col justify-center w-3/12 h-full
@@ -106,7 +115,7 @@ export default function CreatePage() {
         ) : (
           ""
         )}
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }
