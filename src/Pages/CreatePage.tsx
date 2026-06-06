@@ -13,8 +13,6 @@ export default function CreatePage() {
   let [show, setShow] = useState(false);
   let [setting, setSetting] = useState(false);
   let [ans, setAns] = useState(-1);
-  const sample_group = ["X1", "X2", "X3", "X4", "X5"];
-  let [group, setGroup] = useState([]);
   let [ar, setAr] = useState(["option 1", "option 2"]);
   return (
     <div className="flex flex-col">

@@ -2,6 +2,7 @@ import { Outlet, Route, Routes, useNavigate } from "react-router";
 import HomePage from "./Pages/HomePage";
 import AboutPage from "./Pages/AboutPage";
 import CreatePage from "./Pages/CreatePage";
+import CreatePage2 from "./Pages/CreatePage2";
 import PlayPage from "./Pages/PlayPage";
 import SigninPage from "./Pages/SignInPage";
 import Layout from "./layout";
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="/member/about" element={<AboutPage />} />
           <Route path="/member/group" element={<GroupPage />} />
           <Route path="/member/create" element={<CreatePage />} />
+          <Route path="/member/create2" element={<CreatePage2 />} />
           <Route path="/member/play" element={<PlayPage />} />
         </Route>
       </Routes>
