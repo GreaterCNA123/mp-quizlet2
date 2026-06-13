@@ -1,6 +1,5 @@
 import { useMutation } from "convex/react";
 import { useState } from "react";
-import { useNavigate } from "react-router";
 import { api } from "../../convex/_generated/api";
 
 type Question = {
@@ -154,7 +153,7 @@ export default function CreatePage() {
         <strong>Questions</strong>
       </legend>
       <div className="flex flex-row">
-        {ar.map((v, i) => (
+        {ar.map((_, i) => (
           <button
             key={i}
             className={`btn ${qIndex === i ? "bg-pink-200" : "bg-white"}`}
@@ -209,7 +208,7 @@ function Question(args: {
   }
   function setAns(ans: number) {
     let clone = [...ar];
-    clone[qIndexIn].ans = ans;
+    clone[qIndexIn].answer = ans;
     setArIn(clone);
   }
 
@@ -226,7 +225,7 @@ function Question(args: {
     console.log(value);
 
     let clone = [...ar];
-    clone[qIndexIn].timelimit = value;
+    clone[qIndexIn].timeLimit = value;
     setArIn(clone);
 
     console.log(clone);
@@ -287,7 +286,7 @@ function Question(args: {
             <div>
               {qIn.options.map((v, i) => (
                 <button
-                  className={`btn ${qIn.ans === i ? "bg-green-300" : ""}`}
+                  className={`btn ${qIn.answer === i ? "bg-green-300" : ""}`}
                   type="button"
                   onClick={() => setAns(i)}
                   key={i}
@@ -304,7 +303,7 @@ function Question(args: {
         <input
           type="number"
           className="input text-primary border-solid border-black"
-          value={qIn.timelimit}
+          value={qIn.timeLimit}
           onChange={(event) =>
             handleTLUpdate(Number(event.currentTarget.value))
           }
