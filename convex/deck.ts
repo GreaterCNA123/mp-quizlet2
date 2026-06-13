@@ -5,14 +5,37 @@ import { defineSchema, paginationOptsValidator } from "convex/server";
 import schema from "./schema";
 
 export const createDeck = mutation({
-  args: schema.tables.decks.validator,
-  async handler(ctx, args) {
-    await ctx.db.insert("decks", args);
+  args: {
+    title: v.string(),
+    isPublic: v.boolean(),
+    isShuffled: v.boolean(),
+    numQuizQuestion: v.number(),
+    questions: v.array(
+      v.object({
+        img: v.string(),
+        question: v.string(),
+        timeLimit: v.number(),
+        answer: v.number(),
+        options: v.array(v.string()),
+      }),
+    ),
   },
-});
-export const createQuestion = mutation({
-  args: schema.tables.questions.validator,
   async handler(ctx, args) {
-    await ctx.db.insert("questions", args);
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("unauthorized");
+
+    const { isPublic, isShuffled, numQuizQuestion, title, questions } = args;
+
+    let deckId = await ctx.db.insert("decks", {
+      ownerUserId: userId,
+      isPublic,
+      isShuffled,
+      numQuizQuestion,
+      title,
+    });
+
+    for (let question of questions) {
+      await ctx.db.insert("questions", { ...question, deckId });
+    }
   },
 });

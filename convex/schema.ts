@@ -1,6 +1,7 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import { authTables } from "@convex-dev/auth/server";
+import { title } from "process";
 
 // The schema is normally optional, but Convex Auth
 // requires indexes defined on `authTables`.
@@ -9,6 +10,7 @@ export default defineSchema({
   ...authTables,
   decks: defineTable({
     ownerUserId: v.string(),
+    title: v.string(),
     isPublic: v.boolean(),
     isShuffled: v.boolean(),
     numQuizQuestion: v.number(),

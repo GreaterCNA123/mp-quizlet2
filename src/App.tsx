@@ -1,16 +1,13 @@
-import { Outlet, Route, Routes, useNavigate } from "react-router";
-import HomePage from "./Pages/HomePage";
+import { Route, Routes } from "react-router";
+import AuthLayout from "./AuthLayout";
 import AboutPage from "./Pages/AboutPage";
 import CreatePage from "./Pages/CreatePage";
 import CreatePage2 from "./Pages/CreatePage2";
+import GroupPage from "./Pages/GroupsPage";
+import HomePage from "./Pages/HomePage";
 import PlayPage from "./Pages/PlayPage";
 import SigninPage from "./Pages/SignInPage";
 import Layout from "./layout";
-import { useAuthActions } from "@convex-dev/auth/react";
-import { useEffect } from "react";
-import { useConvexAuth } from "convex/react";
-import AuthLayout from "./AuthLayout";
-import GroupPage from "./Pages/GroupsPage";
 
 export default function App() {
   return (
