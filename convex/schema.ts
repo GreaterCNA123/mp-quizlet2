@@ -31,4 +31,14 @@ export default defineSchema({
   })
     .index("by_user", ["userId"])
     .index("by_deck", ["deckId"]),
+  group: defineTable({
+    ownerUserId: v.string(),
+    name: v.string(),
+    memberList: v.array(v.string()),
+    isPublic: v.boolean(),
+  }).index("by_owner", ["ownerUserId"]),
+  playerGroupList: defineTable({
+    userId: v.id("user"),
+    groupJoined: v.string(),
+  }),
 });

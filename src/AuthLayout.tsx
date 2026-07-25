@@ -7,12 +7,10 @@ import {
 } from "convex/react";
 import { useEffect } from "react";
 import { Link, Outlet, useNavigate } from "react-router";
-import { api } from "../convex/_generated/api";
 
 export default function AuthLayout() {
   const { signOut } = useAuthActions();
   const { isAuthenticated, isLoading } = useConvexAuth();
-  const createPost = useMutation(api.deck.createQuestion);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,6 +30,9 @@ export default function AuthLayout() {
         </Link>
         <Link to="/member/play" className="border-2 border-solid p-2">
           <button>Play</button>
+        </Link>
+        <Link to="/member/questions" className="border-2 border-solid p-2">
+          <button>Questions</button>
         </Link>
         <div className="flex-1"></div>
         <Link to="/member/about" className="border-2 border-solid p-2">

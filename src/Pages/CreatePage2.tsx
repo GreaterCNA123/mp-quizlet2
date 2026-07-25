@@ -1,6 +1,7 @@
 import { useMutation } from "convex/react";
 import { useState } from "react";
 import { api } from "../../convex/_generated/api";
+import { Navigate } from "react-router";
 
 type Question = {
   question: string;
@@ -16,6 +17,8 @@ type Question = {
 //         answer: v.number(),
 //         options: v.array(v.string()),
 
+const IMGBB_API_KEY = "bae500e8b9a1f0585640f1a8d4f00078";
+
 export default function CreatePage() {
   const createDeck = useMutation(api.deck.createDeck);
   let [qIndex, setqIndex] = useState(1);
@@ -25,21 +28,21 @@ export default function CreatePage() {
   let [ar, setAr] = useState<Question[]>([
     {
       question: "",
-      options: [],
-      answer: -1,
-      timeLimit: 15,
-      img: "",
-    },
-    {
-      question: "df",
-      options: ["sdf", "3"],
+      options: ["", "", "", ""],
       answer: -1,
       timeLimit: 15,
       img: "",
     },
     {
       question: "",
-      options: [],
+      options: ["", "", "", ""],
+      answer: -1,
+      timeLimit: 15,
+      img: "",
+    },
+    {
+      question: "",
+      options: ["", "", "", ""],
       answer: -1,
       timeLimit: 15,
       img: "",
@@ -133,7 +136,10 @@ export default function CreatePage() {
       </div> */}
       {/* Question is Shuffled? */}
       <div className="flex flex-row">
-        <div className="flex items-center justify-items-center">Shuffled? </div>
+        <div className="flex items-center justify-items-center">
+          {" "}
+          <strong>Shuffled? </strong>{" "}
+        </div>
         <div
           className={`btn ${shuffled ? "bg-green-300" : ""}`}
           onClick={() => setShuffled(true)}
@@ -195,6 +201,51 @@ function Question(args: {
 }) {
   let { qIn, setArIn, ar, qIndexIn } = args;
   let [show, setShow] = useState<boolean>(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+  const [status, setStatus] = useState<"idle" | "uploading" | "done" | "error">(
+    "idle",
+  );
+  const [error, setError] = useState<string | null>(null);
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const picked = e.target.files?.[0];
+    if (!picked) return;
+    setFile(picked);
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPreviewUrl(URL.createObjectURL(picked));
+    setUploadedUrl(null);
+    setStatus("idle");
+  }
+  async function handleUpload() {
+    if (!file) return;
+
+    setStatus("uploading");
+    setError(null);
+    try {
+      const formData = new FormData();
+      formData.append("key", IMGBB_API_KEY);
+      formData.append("image", file);
+      const response = await fetch("https://api.imgbb.com/1/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      if (!data) throw new Error(data.error?.message ?? "Upload Failed");
+
+      setUploadedUrl(data.data.url);
+      let clone = [...ar];
+      clone[qIndexIn].img = data.data.url;
+      setArIn(clone);
+      setStatus("done");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something Went Wrong");
+      setStatus("error");
+    }
+  }
   function addOption() {
     let clone = [...ar];
     clone[qIndexIn].options.push("");
@@ -241,74 +292,119 @@ function Question(args: {
   }
 
   return (
-    <fieldset className="fieldset text-primary">
-      <legend className="fieldset-legend text-primary text-2xl">
-        <strong>Question</strong>
-      </legend>
-      <input
-        type="Question"
-        className="input text-primary border-solid border-black"
-        placeholder="Type Here"
-        value={qIn.question}
-        onChange={(event) => handleQTUpdate(event.currentTarget.value)}
-      />
-      <legend className="fieldset-legend text-primary text-2xl">
-        <strong>Image</strong>
-      </legend>
-      <legend className="fieldset-legend text-primary text-2xl">
-        <strong>Options</strong>
-      </legend>
-      <div className="flex flex-col">
-        {qIn.options.map((v, i) => (
-          <input
-            className="Input"
-            key={i}
-            placeholder="option"
-            value={v}
-            onChange={(event) =>
-              handleOptionUpdate(event.currentTarget.value, i)
-            }
-          />
-        ))}
-        {qIn.options.length < 4 ? (
-          <button className="btn" type="button" onClick={() => addOption()}>
-            +
-          </button>
-        ) : (
-          ""
-        )}
+    <div className="flex flex-col">
+      <fieldset className="fieldset text-primary">
         <legend className="fieldset-legend text-primary text-2xl">
-          <strong>Answer Choices</strong>
-        </legend>
-        <div className="flex flex-col">
-          {/* <div>ans: {qIn.ans}</div> */}
-          {!show ? (
-            <div>
-              {qIn.options.map((v, i) => (
-                <button
-                  className={`btn ${qIn.answer === i ? "bg-green-300" : ""}`}
-                  type="button"
-                  onClick={() => setAns(i)}
-                  key={i}
-                >
-                  {i + 1}
-                </button>
-              ))}
-            </div>
-          ) : null}
-        </div>
-        <legend className="fieldset-legend text-primary text-2xl">
-          <strong>Timelimit</strong>
+          <strong>Question</strong>
         </legend>
         <input
-          type="number"
+          type="Question"
           className="input text-primary border-solid border-black"
-          value={qIn.timeLimit}
-          onChange={(event) =>
-            handleTLUpdate(Number(event.currentTarget.value))
-          }
+          placeholder="Type Here"
+          value={qIn.question}
+          onChange={(event) => handleQTUpdate(event.currentTarget.value)}
         />
-      </div>
-    </fieldset>
+        <legend className="fieldset-legend text-primary text-2xl">
+          <strong>Image</strong>
+        </legend>
+        <div className="bg-white flex flex-col border-4">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="btn"
+          />
+          {previewUrl && status != "done" && (
+            <div>
+              <p>local preview</p>
+              <img
+                src={previewUrl}
+                alt="local preview"
+                className="max-w-1/4 max-h-50"
+              />
+              <button
+                onClick={handleUpload}
+                disabled={status === "uploading"}
+                className="btn btn-primary"
+              >
+                {status === "uploading" ? "...Uploading" : "Upload to imgbb."}
+              </button>
+            </div>
+          )}
+          {(qIn.img != "" || (status === "done" && uploadedUrl)) && (
+            <div>
+              <p>Uploaded!</p>
+              <a
+                href={qIn.img != "" ? qIn.img : uploadedUrl!}
+                target="_blank"
+                rel="nonreferrer"
+              >
+                Permanant URL: {uploadedUrl}
+              </a>
+              <img
+                src={qIn.img != "" ? qIn.img : uploadedUrl || ""}
+                alt="Uploaded"
+                style={{ maxWidth: 400, marginTop: 8 }}
+              />
+            </div>
+          )}
+          {status === "error" && <p style={{ color: "red" }}>Error: {error}</p>}
+        </div>
+        <legend className="fieldset-legend text-primary text-2xl">
+          <strong>Options</strong>
+        </legend>
+        <div className="flex flex-col">
+          {qIn.options.map((v, i) => (
+            <input
+              className="Input"
+              key={i}
+              placeholder="option"
+              value={v}
+              onChange={(event) =>
+                handleOptionUpdate(event.currentTarget.value, i)
+              }
+            />
+          ))}
+          {qIn.options.length < 4 ? (
+            <button className="btn" type="button" onClick={() => addOption()}>
+              +
+            </button>
+          ) : (
+            ""
+          )}
+          <legend className="fieldset-legend text-primary text-2xl">
+            <strong>Answer Choices</strong>
+          </legend>
+          <div className="flex flex-col">
+            {/* <div>ans: {qIn.ans}</div> */}
+            {!show ? (
+              <div>
+                {qIn.options.map((_, i) => (
+                  <button
+                    className={`btn ${qIn.answer === i ? "bg-green-300" : ""}`}
+                    type="button"
+                    onClick={() => setAns(i)}
+                    key={i}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
+          <legend className="fieldset-legend text-primary text-2xl">
+            <strong>Timelimit</strong>
+          </legend>
+          <input
+            type="number"
+            className="input text-primary border-solid border-black"
+            value={qIn.timeLimit}
+            onChange={(event) =>
+              handleTLUpdate(Number(event.currentTarget.value))
+            }
+          />
+        </div>
+      </fieldset>
+    </div>
   );
 }

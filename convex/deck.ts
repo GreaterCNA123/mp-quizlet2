@@ -39,3 +39,23 @@ export const createDeck = mutation({
     }
   },
 });
+
+export const getDecks = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, { paginationOpts }) => {
+    return await ctx.db.query("decks").order("desc").paginate(paginationOpts);
+  },
+});
+
+export const getDeck = query({
+  args: {
+    deckId: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("questions")
+      .withIndex("by_deck", (q) => q.eq("deckId", args.deckId as v.id("decks"))).collect()
+  },
+});

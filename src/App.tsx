@@ -7,7 +7,9 @@ import GroupPage from "./Pages/GroupsPage";
 import HomePage from "./Pages/HomePage";
 import PlayPage from "./Pages/PlayPage";
 import SigninPage from "./Pages/SignInPage";
+import ImagePage from "./Pages/ImagePage";
 import Layout from "./layout";
+import QuestionsPage from "./Pages/QuestionsPage";
 
 export default function App() {
   return (
@@ -25,6 +27,7 @@ export default function App() {
           <Route path="/member/about" element={<AboutPage />} />
           <Route path="/member/group" element={<GroupPage />} />
           <Route path="/member/create" element={<CreatePage />} />
+          <Route path="/member/questions/:deck  " element={<QuestionsPage />} />
           <Route path="/member/create2" element={<CreatePage2 />} />
           <Route path="/member/play" element={<PlayPage />} />
         </Route>

@@ -6,7 +6,7 @@ import { api } from "../../convex/_generated/api";
 // const Sanswer = <button onClick = {() => }> </button>
 function handleSubmit() {}
 export default function CreatePage() {
-  const createPost = useMutation(api.deck.createQuestion);
+  const createPost = useMutation(api.deck.createDeck);
   const navigate = useNavigate();
   let placeholder_1 = true;
   let [pub, setPub] = useState(false);
