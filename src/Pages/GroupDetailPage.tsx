@@ -88,7 +88,7 @@ export default function GroupDetailPage() {
 
       <section className="flex flex-col gap-y-2">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold">Shared Decks</h2>
+          <h2 className="text-lg font-bold">Decks &amp; Leaderboard</h2>
           {mock_up_isLeader && (
             <button
               onClick={mock_up_addDeck}
@@ -98,44 +98,36 @@ export default function GroupDetailPage() {
             </button>
           )}
         </div>
-        <div className="flex flex-col gap-y-2">
-          {mock_up_decks.map((deck) => (
-            <div
-              key={deck.id}
-              className="border border-black px-3 py-2 flex items-center justify-between"
-            >
-              <span>{deck.title}</span>
-              <Link
-                to={`/app/groups/${groupId}/quiz/${deck.id}`}
-                className="border border-black px-3 py-1"
-              >
-                Start Group Quiz
-              </Link>
-            </div>
-          ))}
-        </div>
-      </section>
 
-      <section className="flex flex-col gap-y-2">
-        <h2 className="text-lg font-bold">Leaderboard</h2>
-
-        <div className="text-sm font-bold">Deck Winners</div>
+        <div className="text-sm font-bold">Decks</div>
         <table className="w-full border border-black text-sm">
           <thead>
             <tr className="border-b border-black">
               <th className="text-left px-2 py-1">Deck</th>
               <th className="text-left px-2 py-1">Winner(s)</th>
+              <th className="text-left px-2 py-1"></th>
             </tr>
           </thead>
           <tbody>
-            {mock_up_deck_results.map((result) => {
-              const deck = mock_up_decks.find((d) => d.id === result.deckId);
+            {mock_up_decks.map((deck) => {
+              const result = mock_up_deck_results.find(
+                (r) => r.deckId === deck.id,
+              );
               return (
-                <tr key={result.deckId} className="border-b border-black">
-                  <td className="px-2 py-1">{deck?.title ?? result.deckId}</td>
+                <tr key={deck.id} className="border-b border-black">
+                  <td className="px-2 py-1">{deck.title}</td>
                   <td className="px-2 py-1">
-                    {result.winners.join(" & ")}
-                    {result.winners.length > 1 ? " (tie)" : ""}
+                    {result
+                      ? `${result.winners.join(" & ")}${result.winners.length > 1 ? " (tie)" : ""}`
+                      : "—"}
+                  </td>
+                  <td className="px-2 py-1 text-right">
+                    <Link
+                      to={`/app/groups/${groupId}/quiz/${deck.id}`}
+                      className="border border-black px-3 py-1"
+                    >
+                      Start Group Quiz
+                    </Link>
                   </td>
                 </tr>
               );
