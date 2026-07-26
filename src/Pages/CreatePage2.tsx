@@ -83,15 +83,13 @@ export default function CreatePage() {
   }
 
   return (
-    <form className="m-2" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-y-4 p-6 max-w-2xl mx-auto" onSubmit={handleSubmit}>
       {/* Deck Title */}
-      <fieldset className="fieldset text-primary">
-        <legend className="fieldset-legend text-primary text-2xl">
-          <strong>Deck title</strong>
-        </legend>
+      <fieldset className="flex flex-col gap-y-1">
+        <legend className="text-xl font-bold">Deck title</legend>
         <input
           type="text"
-          className="input text-primary border-solid border-black"
+          className="border border-black px-2 py-1"
           placeholder="Type Here"
           name="title"
         />
@@ -99,14 +97,14 @@ export default function CreatePage() {
       {/* Public or Private */}
       <div>
         <div
-          className="text-black border-2 border-black border-solid"
+          className="border border-black px-2 py-1 w-fit"
           onClick={() => setShow(!show)}
         >
           {!pub ? "Private" : "Public"}
         </div>
         {!show ? (
           <div
-            className="text-black"
+            className="border border-black px-2 py-1 w-fit"
             onClick={() => {
               setShow(!show);
               setPub(!pub);
@@ -116,60 +114,42 @@ export default function CreatePage() {
           </div>
         ) : null}
       </div>
-      {/* Number of Questions When Set is Played */}
-      {/* <div className="flex flex-row">
-        <div className="flex items-center justify-items-center">
-          Number of Questions in a Match:
-        </div>
-        <input
-          type="number"
-          className="input text-primary border-solid border-black"
-          placeholder="Type Here"
-          name="numQuizQuestion"
-          value={1}
-          onChange={(event) =>
-            Number("event.currentTarget.value") > ar.length
-              ? ar.length
-              : Number(event.currentTarget.value)
-          }
-        />
-      </div> */}
       {/* Question is Shuffled? */}
-      <div className="flex flex-row">
-        <div className="flex items-center justify-items-center">
-          {" "}
-          <strong>Shuffled? </strong>{" "}
-        </div>
-        <div
-          className={`btn ${shuffled ? "bg-green-300" : ""}`}
+      <div className="flex flex-row items-center gap-x-2">
+        <strong>Shuffled?</strong>
+        <button
+          type="button"
+          className={`border border-black px-3 py-1 ${shuffled ? "bg-black text-white" : ""}`}
           onClick={() => setShuffled(true)}
         >
           Yes
-        </div>
-        <div
-          className={`btn ${!shuffled ? "bg-green-300" : ""}`}
+        </button>
+        <button
+          type="button"
+          className={`border border-black px-3 py-1 ${!shuffled ? "bg-black text-white" : ""}`}
           onClick={() => setShuffled(false)}
         >
           No
-        </div>
+        </button>
       </div>
       {/* Each of the Questions */}
-      <h3 />
-      <legend className="fieldset-legend text-primary text-2xl">
-        <strong>Questions</strong>
-      </legend>
-      <div className="flex flex-row">
+      <legend className="text-xl font-bold">Questions</legend>
+      <div className="flex flex-row gap-x-2">
         {ar.map((_, i) => (
           <button
             key={i}
-            className={`btn ${qIndex === i ? "bg-pink-200" : "bg-white"}`}
+            className={`border border-black px-3 py-1 ${qIndex === i ? "bg-black text-white" : ""}`}
             type="button"
             onClick={() => setqIndex(i)}
           >
             {i}
           </button>
         ))}
-        <button type="button" className="btn" onClick={() => addQuestion()}>
+        <button
+          type="button"
+          className="border border-black px-3 py-1"
+          onClick={() => addQuestion()}
+        >
           +
         </button>
       </div>
@@ -184,10 +164,14 @@ export default function CreatePage() {
         />
       )}
       <div className="flex gap-x-5">
-        <button type="button" className="btn" onClick={() => delQuest()}>
+        <button
+          type="button"
+          className="border border-black px-3 py-1"
+          onClick={() => delQuest()}
+        >
           Delete
         </button>
-        <button className="btn">Submit</button>
+        <button className="border border-black px-3 py-1">Submit</button>
       </div>
     </form>
   );
@@ -292,48 +276,39 @@ function Question(args: {
   }
 
   return (
-    <div className="flex flex-col">
-      <fieldset className="fieldset text-primary">
-        <legend className="fieldset-legend text-primary text-2xl">
-          <strong>Question</strong>
-        </legend>
+    <div className="flex flex-col gap-y-2 border border-black p-4">
+      <fieldset className="flex flex-col gap-y-2">
+        <legend className="text-lg font-bold">Question</legend>
         <input
-          type="Question"
-          className="input text-primary border-solid border-black"
+          type="text"
+          className="border border-black px-2 py-1"
           placeholder="Type Here"
           value={qIn.question}
           onChange={(event) => handleQTUpdate(event.currentTarget.value)}
         />
-        <legend className="fieldset-legend text-primary text-2xl">
-          <strong>Image</strong>
-        </legend>
-        <div className="bg-white flex flex-col border-4">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="btn"
-          />
+        <legend className="text-lg font-bold">Image</legend>
+        <div className="border border-black p-2 flex flex-col gap-y-2">
+          <input type="file" accept="image/*" onChange={handleFileChange} />
           {previewUrl && status != "done" && (
-            <div>
-              <p>local preview</p>
+            <div className="flex flex-col gap-y-1">
+              <p className="text-sm">local preview</p>
               <img
                 src={previewUrl}
                 alt="local preview"
-                className="max-w-1/4 max-h-50"
+                className="max-w-1/4 max-h-50 border border-black"
               />
               <button
                 onClick={handleUpload}
                 disabled={status === "uploading"}
-                className="btn btn-primary"
+                className="border border-black px-3 py-1 w-fit"
               >
                 {status === "uploading" ? "...Uploading" : "Upload to imgbb."}
               </button>
             </div>
           )}
           {(qIn.img != "" || (status === "done" && uploadedUrl)) && (
-            <div>
-              <p>Uploaded!</p>
+            <div className="flex flex-col gap-y-1">
+              <p className="text-sm">Uploaded!</p>
               <a
                 href={qIn.img != "" ? qIn.img : uploadedUrl!}
                 target="_blank"
@@ -344,19 +319,18 @@ function Question(args: {
               <img
                 src={qIn.img != "" ? qIn.img : uploadedUrl || ""}
                 alt="Uploaded"
+                className="border border-black"
                 style={{ maxWidth: 400, marginTop: 8 }}
               />
             </div>
           )}
-          {status === "error" && <p style={{ color: "red" }}>Error: {error}</p>}
+          {status === "error" && <p>Error: {error}</p>}
         </div>
-        <legend className="fieldset-legend text-primary text-2xl">
-          <strong>Options</strong>
-        </legend>
-        <div className="flex flex-col">
+        <legend className="text-lg font-bold">Options</legend>
+        <div className="flex flex-col gap-y-2">
           {qIn.options.map((v, i) => (
             <input
-              className="Input"
+              className="border border-black px-2 py-1"
               key={i}
               placeholder="option"
               value={v}
@@ -366,22 +340,23 @@ function Question(args: {
             />
           ))}
           {qIn.options.length < 4 ? (
-            <button className="btn" type="button" onClick={() => addOption()}>
+            <button
+              className="border border-black px-3 py-1 w-fit"
+              type="button"
+              onClick={() => addOption()}
+            >
               +
             </button>
           ) : (
             ""
           )}
-          <legend className="fieldset-legend text-primary text-2xl">
-            <strong>Answer Choices</strong>
-          </legend>
-          <div className="flex flex-col">
-            {/* <div>ans: {qIn.ans}</div> */}
+          <legend className="text-lg font-bold">Answer Choices</legend>
+          <div className="flex flex-col gap-y-2">
             {!show ? (
-              <div>
+              <div className="flex gap-x-2">
                 {qIn.options.map((_, i) => (
                   <button
-                    className={`btn ${qIn.answer === i ? "bg-green-300" : ""}`}
+                    className={`border border-black px-3 py-1 ${qIn.answer === i ? "bg-black text-white" : ""}`}
                     type="button"
                     onClick={() => setAns(i)}
                     key={i}
@@ -392,12 +367,10 @@ function Question(args: {
               </div>
             ) : null}
           </div>
-          <legend className="fieldset-legend text-primary text-2xl">
-            <strong>Timelimit</strong>
-          </legend>
+          <legend className="text-lg font-bold">Timelimit</legend>
           <input
             type="number"
-            className="input text-primary border-solid border-black"
+            className="border border-black px-2 py-1"
             value={qIn.timeLimit}
             onChange={(event) =>
               handleTLUpdate(Number(event.currentTarget.value))

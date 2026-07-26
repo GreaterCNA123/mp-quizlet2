@@ -51,11 +51,12 @@ export const getDecks = query({
 
 export const getDeck = query({
   args: {
-    deckId: v.optional(v.string()),
+    deckId: v.id("decks"),
   },
   handler: async (ctx, args) => {
     return await ctx.db
       .query("questions")
-      .withIndex("by_deck", (q) => q.eq("deckId", args.deckId as v.id("decks"))).collect()
+      .withIndex("by_deck", (q) => q.eq("deckId", args.deckId))
+      .collect();
   },
 });

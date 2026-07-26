@@ -9,29 +9,26 @@ export default function Layout() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoading && isAuthenticated) navigate("/member");
+    if (!isLoading && isAuthenticated) navigate("/app");
   }, [isAuthenticated, isLoading]);
   return (
-    <div className="h-screen bg-yellow-500 flex flex-col">
-      <nav className="flex grid-cols-2 rounded-xl border-2 p-5border-solid divide-black bg-primary text-primary-content space-x-2">
-        <Link to="/" className="border-2 border-solid p-2 w-16">
-          <button>Home</button>
-        </Link>
-        <Link to="/play" className="border-2 border-solid p-2">
-          <button>Play</button>
+    <div className="min-h-screen flex flex-col">
+      <nav className="flex items-center border-b border-black px-4 py-3 gap-4">
+        <Link to="/" className="font-bold">
+          Quizlet Clone
         </Link>
         <div className="flex-1"></div>
         <Authenticated>
-          <div className="border-2 border-solid p-2">Signed Up</div>
+          <span className="text-sm">Signed in</span>
         </Authenticated>
         <Unauthenticated>
-          <div className="border-2 border-solid p-2">Guest</div>
+          <span className="text-sm">Guest</span>
         </Unauthenticated>
-        <Link to="/about" className="border-2 border-solid p-2">
-          <button>About</button>
+        <Link to="/about" className="border border-black px-3 py-1">
+          About
         </Link>
-        <Link to="/signin" className="border-2 border-solid p-2">
-          <button>Sign-In</button>
+        <Link to="/signin" className="border border-black px-3 py-1">
+          Sign In
         </Link>
       </nav>
       <Outlet />

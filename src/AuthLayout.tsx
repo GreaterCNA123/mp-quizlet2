@@ -1,10 +1,5 @@
 import { useAuthActions } from "@convex-dev/auth/react";
-import {
-  Authenticated,
-  Unauthenticated,
-  useConvexAuth,
-  useMutation,
-} from "convex/react";
+import { Authenticated, useConvexAuth } from "convex/react";
 import { useEffect } from "react";
 import { Link, Outlet, useNavigate } from "react-router";
 
@@ -14,35 +9,32 @@ export default function AuthLayout() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) navigate("/play");
+    if (!isLoading && !isAuthenticated) navigate("/signin");
   }, [isAuthenticated, isLoading]);
   return (
-    <div className="h-screen flex flex-col">
-      <nav className="flex grid-cols-2 rounded-xl border-2 p-5border-solid divide-black bg-primary text-primary-content space-x-2">
-        <Link to="/member/" className="border-2 border-solid p-2 w-16">
-          <button>Home</button>
+    <div className="min-h-screen flex flex-col">
+      <nav className="flex items-center border-b border-black px-4 py-3 gap-4">
+        <Link to="/app" className="font-bold">
+          Quizlet Clone
         </Link>
-        <Link to="/member/group" className="border-2 border-solid p-2 w-16">
-          <button>Group</button>
+        <Link to="/app/manage-decks" className="border border-black px-3 py-1">
+          Manage Decks
         </Link>
-        <Link to="/member/create2" className="border-2 border-solid p-2">
-          <button>Create</button>
+        <Link to="/app/play" className="border border-black px-3 py-1">
+          Play
         </Link>
-        <Link to="/member/play" className="border-2 border-solid p-2">
-          <button>Play</button>
+        <Link to="/app/groups" className="border border-black px-3 py-1">
+          Groups
         </Link>
-        <Link to="/member/questions" className="border-2 border-solid p-2">
-          <button>Questions</button>
+        <Link to="/app/profile" className="border border-black px-3 py-1">
+          Profile
         </Link>
         <div className="flex-1"></div>
-        <Link to="/member/about" className="border-2 border-solid p-2">
-          <button>About</button>
+        <Link to="/about" className="border border-black px-3 py-1">
+          About
         </Link>
         <Authenticated>
-          <button
-            onClick={signOut}
-            className="border-2 border-solid p-2 border-black"
-          >
+          <button onClick={signOut} className="border border-black px-3 py-1">
             Sign Out
           </button>
         </Authenticated>

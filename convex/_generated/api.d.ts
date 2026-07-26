@@ -10,6 +10,7 @@
 
 import type * as auth from "../auth.js";
 import type * as deck from "../deck.js";
+import type * as group from "../group.js";
 import type * as http from "../http.js";
 
 import type {
@@ -21,6 +22,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   deck: typeof deck;
+  group: typeof group;
   http: typeof http;
 }>;
 

@@ -13,42 +13,42 @@ export default function SigninPage() {
     const formData = new FormData(form);
     formData.set("flow", mode);
     await signIn("password", formData);
-    navigate("/member");
+    navigate("/app");
   }
 
   return (
-    <div className="flex flex-1 justify-center items-center">
-      <div className="btn h-100 w-100 bg-white flex flex-col justify-center">
-        <div role="tablist" className="tabs tabs-lift">
-          <a
-            role="tab"
-            className={`tab ${mode === "signIn" ? "tab-active" : ""}`}
+    <div className="flex flex-1 justify-center items-center p-6">
+      <div className="border border-black p-6 w-80 flex flex-col gap-y-4">
+        <div className="flex border border-black">
+          <button
+            type="button"
+            className={`flex-1 py-2 ${mode === "signIn" ? "bg-black text-white" : ""}`}
             onClick={() => setMode("signIn")}
           >
             Sign In
-          </a>
-          <a
-            role="tab"
-            className={`tab ${mode === "signUp" ? "tab-active" : ""}`}
+          </button>
+          <button
+            type="button"
+            className={`flex-1 py-2 ${mode === "signUp" ? "bg-black text-white" : ""}`}
             onClick={() => setMode("signUp")}
           >
             Sign Up
-          </a>
+          </button>
         </div>
-        <form className="grid grid-rows-3" onSubmit={handleSignUp}>
+        <form className="flex flex-col gap-y-3" onSubmit={handleSignUp}>
           <input
-            className="bg-gray-400 w-50 h-10"
+            className="border border-black px-2 py-2"
             type="text"
             name="email"
             placeholder="email"
           ></input>
           <input
-            className="bg-gray-400 w-50 h-10"
+            className="border border-black px-2 py-2"
             type="password"
             name="password"
             placeholder="password"
           ></input>
-          <button className="bg-black">
+          <button className="border border-black py-2" type="submit">
             {mode === "signUp" ? "Sign Up" : "Sign In"}
           </button>
         </form>

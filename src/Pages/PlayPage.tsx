@@ -1,4 +1,4 @@
-import { usePaginatedQuery, useQuery } from "convex/react";
+import { usePaginatedQuery } from "convex/react";
 import { useState } from "react";
 import { api } from "../../convex/_generated/api";
 import { Link } from "react-router";
@@ -11,47 +11,59 @@ export default function PlayPage() {
   } = usePaginatedQuery(api.deck.getDecks, {}, { initialNumItems: 2 });
 
   return (
-    <div className="flex flex-col gap-y-5 items-center">
+    <div className="flex flex-col gap-y-5 items-center p-6">
       <Search />
-      <div className="bg-white flex grid-col-5 gap-x-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {decks.map((deck) =>
-          deck.isPublic === true ? <Card deck={deck} /> : "",
+          deck.isPublic === true ? <Card deck={deck} key={deck._id} /> : null,
         )}
       </div>
       {status === "CanLoadMore" && (
-        <button className="btn btn-primary" onClick={() => loadMore(1)}>
+        <button
+          className="border border-black px-3 py-1"
+          onClick={() => loadMore(1)}
+        >
           Load more
         </button>
       )}
     </div>
   );
 }
+
 export function Search() {
+  // mock_up: no real search/filter wired up yet, input is decorative for now
+  const [mock_up_query, mock_up_setQuery] = useState("");
   return (
-    <div className="w-10/12 mt-5 bg-white border">
+    <div className="w-full max-w-md border border-black">
       <input
-        className="w-full text-black"
-        placeholder="Search for Content"
+        className="w-full px-2 py-2"
+        placeholder="Search for Content (mock_up, not wired up)"
+        value={mock_up_query}
+        onChange={(e) => mock_up_setQuery(e.currentTarget.value)}
       ></input>
     </div>
   );
 }
+
 export function Card({ deck }: { deck: any }) {
-  let [nums, setNums] = useState(0);
-  let [tags, setTags] = useState("Biology");
+  // mock_up: likes/tags have no backend field yet, shown for layout only
+  const mock_up_likes = 0;
+  const mock_up_tag = "General";
 
   return (
-    <div className="btn bg-white h-60 w-60 grid grid-rows-4 gap-y-3">
-      <div className="bg-blue-500 text-white">{deck.title}</div>
-      <div className="bg-blue-500 h-20 rounded-2xl"></div>
-      <div className="bg-blue-500 text-white h-20 flex">
-        <div className="bg-white h-5 "></div>
+    <div className="border border-black h-60 w-60 grid grid-rows-5 gap-y-2 p-3">
+      <div className="font-bold">{deck.title}</div>
+      <div className="border border-black"></div>
+      <div className="text-sm">Questions: {deck.questions?.length ?? "?"}</div>
+      <div className="grid grid-cols-2 gap-x-2 text-sm">
+        <div className="border border-black px-2 py-1">
+          Likes: {mock_up_likes}
+        </div>
+        <div className="border border-black px-2 py-1">Tag: #{mock_up_tag}</div>
       </div>
-      <div className="bg-black grid grid-cols-2">
-        <div className="btn bg-white text-black ">Likes: {nums}❤️</div>
-        <div className="btn bg-white text-black">Tags: #{tags}</div>
-      </div>
-      <Link to={`/questions/${deck._id}`}>OPEN DECK</Link>
+      <Link to={`/app/play/${deck._id}`} className="border border-black px-2 py-1 text-center">
+        OPEN DECK
+      </Link>
     </div>
   );
 }
